@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article/Tweet to Audio - Convertisseur MP3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎧 Article/Tweet to Audio</h1>
+            <p class="subtitle">Transformez vos articles et threads Twitter en fichiers audio MP3</p>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-button active" data-tab="text">📝 Texte Direct</button>
+                <button class="tab-button" data-tab="url">🔗 URL Article</button>
+                <button class="tab-button" data-tab="twitter">🐦 Thread Twitter</button>
+            </div>
+
+            <div class="tab-content active" id="text-tab">
+                <div class="input-section">
+                    <label for="text-input">Collez votre texte ici :</label>
+                    <textarea
+                        id="text-input"
+                        placeholder="Collez votre article ou thread Twitter ici..."
+                        rows="10"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="tab-content" id="url-tab">
+                <div class="input-section">
+                    <label for="url-input">URL de l'article :</label>
+                    <input
+                        type="url"
+                        id="url-input"
+                        placeholder="https://example.com/article"
+                    >
+                    <button id="extract-url-btn" class="btn btn-secondary">
+                        📥 Extraire le texte
+                    </button>
+                    <div id="url-preview" class="preview hidden">
+                        <h3>Texte extrait :</h3>
+                        <textarea id="url-text" rows="10"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="twitter-tab">
+                <div class="input-section">
+                    <label for="twitter-input">URL du thread Twitter :</label>
+                    <input
+                        type="url"
+                        id="twitter-input"
+                        placeholder="https://twitter.com/user/status/..."
+                    >
+                    <button id="extract-twitter-btn" class="btn btn-secondary">
+                        📥 Extraire le thread
+                    </button>
+                    <div class="info-box">
+                        <p><strong>Note :</strong> L'extraction automatique de Twitter nécessite une API. Pour l'instant, copiez-collez directement le texte du thread dans l'onglet "Texte Direct".</p>
+                    </div>
+                    <div id="twitter-preview" class="preview hidden">
+                        <h3>Thread extrait :</h3>
+                        <textarea id="twitter-text" rows="10"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <label for="language-select">Langue :</label>
+                <select id="language-select">
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="it">🇮🇹 Italiano</option>
+                    <option value="pt">🇵🇹 Português</option>
+                </select>
+            </div>
+
+            <div class="action-section">
+                <button id="convert-btn" class="btn btn-primary">
+                    🎵 Convertir en Audio MP3
+                </button>
+            </div>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Conversion en cours...</p>
+            </div>
+
+            <div id="error" class="error hidden"></div>
+
+            <div id="result" class="result hidden">
+                <h3>✅ Conversion réussie !</h3>
+                <button id="download-btn" class="btn btn-success">
+                    ⬇️ Télécharger le MP3
+                </button>
+                <audio id="audio-player" controls></audio>
+            </div>
+        </main>
+
+        <footer>
+            <p>Créé avec ❤️ | Limite : 10 000 caractères par conversion</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
