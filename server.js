@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
-const gtts = require('gtts');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -150,20 +152,37 @@ app.post('/api/convert', async (req, res) => {
     // Generate unique filename
     const filename = `audio_${uuidv4()}.mp3`;
     const filepath = path.join(audioDir, filename);
+    const wavPath = filepath.replace('.mp3', '.wav');
+    const textPath = path.join(audioDir, `text_${uuidv4()}.txt`);
 
-    // Create TTS
-    const tts = new gtts(truncatedText, language);
+    // Map language codes to espeak language codes
+    const voiceMap = {
+      'fr': 'fr',
+      'en': 'en',
+      'es': 'es',
+      'de': 'de',
+      'it': 'it',
+      'pt': 'pt'
+    };
 
-    // Save to file
-    await new Promise((resolve, reject) => {
-      tts.save(filepath, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
+    const voice = voiceMap[language] || 'en';
+
+    // Write text to temporary file
+    fs.writeFileSync(textPath, truncatedText, 'utf8');
+
+    // Generate speech using espeak and save to WAV
+    await execPromise(`espeak -v ${voice} -w "${wavPath}" -f "${textPath}"`);
+
+    // Convert WAV to MP3 using ffmpeg
+    await execPromise(`ffmpeg -i "${wavPath}" -codec:a libmp3lame -qscale:a 2 "${filepath}" -y 2>/dev/null`);
+
+    // Delete temporary files
+    if (fs.existsSync(wavPath)) {
+      fs.unlinkSync(wavPath);
+    }
+    if (fs.existsSync(textPath)) {
+      fs.unlinkSync(textPath);
+    }
 
     console.log(`Audio file created: ${filename}`);
 

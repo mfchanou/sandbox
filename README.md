@@ -18,6 +18,19 @@ Une application web moderne qui transforme vos articles et threads Twitter en fi
 
 - Node.js (version 14 ou supérieure)
 - npm ou yarn
+- espeak (synthétiseur vocal)
+- ffmpeg (conversion audio)
+
+**Installation des dépendances système (Linux/Ubuntu) :**
+```bash
+sudo apt-get update
+sudo apt-get install -y espeak ffmpeg
+```
+
+**Installation sur macOS :**
+```bash
+brew install espeak ffmpeg
+```
 
 ### Étapes d'installation
 
@@ -74,7 +87,8 @@ Une application web moderne qui transforme vos articles et threads Twitter en fi
 
 ### Backend
 - **Express.js** : Framework web Node.js
-- **gtts** : Google Text-to-Speech pour la conversion audio
+- **espeak** : Synthétiseur vocal pour la conversion texte-vers-audio
+- **ffmpeg** : Conversion WAV vers MP3
 - **Cheerio** : Extraction de contenu web
 - **Axios** : Requêtes HTTP
 - **UUID** : Génération de noms de fichiers uniques
